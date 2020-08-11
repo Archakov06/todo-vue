@@ -1,28 +1,65 @@
 <template>
+  <!-- Сравнить бандлы всех тудушек на разных фреймворках -->
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="todo">
+      <div class="todo__header">
+        <h4>Список задач</h4>
+      </div>
+      <TaskField @onAddTask="onAddTask" />
+      <div class="todo__list">
+        <ListItem
+          v-for="(task, index) in tasks"
+          :key="index"
+          :index="index"
+          :text="task.text"
+          :completed="task.completed"
+          @onToggleCompleted="onToggleCompleted"
+          @onRemoveTask="onRemoveTask"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ListItem from "./components/ListItem";
+import TaskField from "./components/TaskField";
 
 export default {
-  name: 'App',
+  name: "App",
+  data: () => ({
+    tasks: [
+      {
+        text: "Изучить VueJS",
+        completed: true,
+      },
+      {
+        text: "Разработать ToDo на VueJS",
+        completed: false,
+      },
+    ],
+  }),
+  methods: {
+    onToggleCompleted(index) {
+      this.tasks[index].completed = !this.tasks[index].completed;
+    },
+    onRemoveTask(index) {
+      this.tasks.splice(index, 1);
+    },
+    onAddTask(text) {
+      this.tasks.push({
+        text,
+        completed: false,
+      });
+    },
+  },
   components: {
-    HelloWorld
-  }
-}
+    ListItem,
+    TaskField,
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import "./assets/app.css";
 </style>
